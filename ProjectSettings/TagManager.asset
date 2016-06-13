@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - TButton
+  - SButton
+  - Hopper
+  - Top
+  - Bottom
   layers:
   - Default
   - TransparentFX
