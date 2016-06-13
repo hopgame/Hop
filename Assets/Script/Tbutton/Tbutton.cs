@@ -14,6 +14,5 @@ public class Tbutton : MonoBehaviour {
 	}
     void Touched()
     {
-        if()
     }
 }
