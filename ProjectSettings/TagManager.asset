@@ -9,6 +9,7 @@ TagManager:
   - Hopper
   - Top
   - Bottom
+  - Beatspad
   layers:
   - Default
   - TransparentFX
