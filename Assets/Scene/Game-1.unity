@@ -143,6 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a12a6df1fe650d441955e878d144f941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cf: {fileID: 0}
+  hp: {fileID: 0}
   instantTeleport: 0
   randomTeleport: 0
   buttonTeleport: 0
@@ -202,7 +204,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -469,6 +471,7 @@ GameObject:
   - 135: {fileID: 399003891}
   - 23: {fileID: 399003890}
   - 54: {fileID: 399003889}
+  - 75: {fileID: 399003893}
   m_Layer: 0
   m_Name: Hopper1
   m_TagString: Hopper
@@ -554,6 +557,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 399003887}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!75 &399003893
+ConstantForce:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 399003887}
+  m_Enabled: 1
+  m_Force: {x: 0, y: 0, z: 0}
+  m_RelativeForce: {x: 0, y: 0, z: 0}
+  m_Torque: {x: 0, y: 0, z: 0}
+  m_RelativeTorque: {x: 0, y: 0, z: 0}
 --- !u!1 &429721304
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,6 +580,7 @@ GameObject:
   - 135: {fileID: 429721308}
   - 23: {fileID: 429721307}
   - 54: {fileID: 429721306}
+  - 75: {fileID: 429721310}
   m_Layer: 0
   m_Name: Hopper3
   m_TagString: Hopper
@@ -651,6 +666,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 429721304}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!75 &429721310
+ConstantForce:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 429721304}
+  m_Enabled: 1
+  m_Force: {x: 0, y: 0, z: 0}
+  m_RelativeForce: {x: 0, y: 0, z: 0}
+  m_Torque: {x: 0, y: 0, z: 0}
+  m_RelativeTorque: {x: 0, y: 0, z: 0}
 --- !u!1 &516980037
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,6 +736,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a12a6df1fe650d441955e878d144f941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cf: {fileID: 0}
+  hp: {fileID: 0}
   instantTeleport: 0
   randomTeleport: 0
   buttonTeleport: 0
@@ -783,7 +811,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -799,6 +827,7 @@ GameObject:
   - 65: {fileID: 560281866}
   - 23: {fileID: 560281865}
   - 54: {fileID: 560281868}
+  - 114: {fileID: 560281869}
   m_Layer: 0
   m_Name: Top
   m_TagString: Top
@@ -878,10 +907,21 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &560281869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 560281863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 677576b22bdfc874eb45f3208659f320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &561907357
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,6 +1204,7 @@ GameObject:
   - 135: {fileID: 759511850}
   - 23: {fileID: 759511849}
   - 54: {fileID: 759511848}
+  - 75: {fileID: 759511852}
   m_Layer: 0
   m_Name: Hopper0
   m_TagString: Hopper
@@ -1249,6 +1290,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 759511846}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!75 &759511852
+ConstantForce:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 759511846}
+  m_Enabled: 1
+  m_Force: {x: 0, y: 0, z: 0}
+  m_RelativeForce: {x: 0, y: 0, z: 0}
+  m_Torque: {x: 0, y: 0, z: 0}
+  m_RelativeTorque: {x: 0, y: 0, z: 0}
 --- !u!1 &784514594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1340,6 +1392,7 @@ GameObject:
   - 135: {fileID: 923370421}
   - 23: {fileID: 923370420}
   - 54: {fileID: 923370419}
+  - 75: {fileID: 923370423}
   m_Layer: 0
   m_Name: Hopper2
   m_TagString: Hopper
@@ -1425,6 +1478,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 923370417}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!75 &923370423
+ConstantForce:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 923370417}
+  m_Enabled: 1
+  m_Force: {x: 0, y: 0, z: 0}
+  m_RelativeForce: {x: 0, y: 0, z: 0}
+  m_Torque: {x: 0, y: 0, z: 0}
+  m_RelativeTorque: {x: 0, y: 0, z: 0}
 --- !u!1 &997690798
 GameObject:
   m_ObjectHideFlags: 0
@@ -1515,6 +1579,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a12a6df1fe650d441955e878d144f941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cf: {fileID: 0}
+  hp: {fileID: 0}
   instantTeleport: 0
   randomTeleport: 0
   buttonTeleport: 0
@@ -1588,7 +1654,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -2249,6 +2315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a12a6df1fe650d441955e878d144f941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cf: {fileID: 0}
+  hp: {fileID: 0}
   instantTeleport: 0
   randomTeleport: 0
   buttonTeleport: 0
@@ -2308,7 +2376,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
