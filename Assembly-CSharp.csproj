@@ -45,13 +45,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Buttonscript.cs" />
      <Compile Include="Assets\Controller\GlobalController.cs" />
      <Compile Include="Assets\Material\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
-     <Compile Include="Assets\Script\Cameracontrol.cs" />
-     <Compile Include="Assets\Script\Hopper\Hopperscript.cs" />
-     <Compile Include="Assets\Script\Tbutton\Tbutton.cs" />
-     <Compile Include="Assets\Script\beatspad\CustomTeleporter.cs" />
-     <Compile Include="Assets\Script\top\Topscrpit.cs" />
+     <Compile Include="Assets\Quitscirpt.cs" />
+     <Compile Include="Assets\Script\Gamescen\Cameracontrol.cs" />
+     <Compile Include="Assets\Script\Gamescen\Hopper\Hopperscript.cs" />
+     <Compile Include="Assets\Script\Gamescen\SButton\SButton.cs" />
+     <Compile Include="Assets\Script\Gamescen\Tbutton\Tbutton.cs" />
+     <Compile Include="Assets\Script\Gamescen\beatspad\CustomTeleporter.cs" />
+     <Compile Include="Assets\Script\Gamescen\top\Topscrpit.cs" />
+     <Compile Include="Assets\Script\Stopmenuscene\BaseScript.cs" />
+     <Compile Include="Assets\Script\Stopmenuscene\ResumeEvent.cs" />
      <None Include="Assets\Teleportation Pad\README.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />

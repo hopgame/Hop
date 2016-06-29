@@ -28,7 +28,7 @@ public class Topscrpit : MonoBehaviour {
             cf = rb.GetComponent<ConstantForce>();
             cf.force = vertical;
 
-            Debug.Log("Finish the process");
+            //Debug.Log("Finish the process");
         }
     }
 }
