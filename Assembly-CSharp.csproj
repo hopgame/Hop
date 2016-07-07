@@ -54,12 +54,16 @@
      <Compile Include="Assets\Script\Gamescen\Tbutton\Tbutton.cs" />
      <Compile Include="Assets\Script\Gamescen\beatspad\CustomTeleporter.cs" />
      <Compile Include="Assets\Script\Gamescen\top\Topscrpit.cs" />
+     <Compile Include="Assets\Script\Selecsong\AudioButton.cs" />
+     <Compile Include="Assets\Script\Selecsong\Initialize.cs" />
+     <Compile Include="Assets\Script\Selecsong\PlayEnter.cs" />
      <Compile Include="Assets\Script\Stopmenuscene\BaseScript.cs" />
      <Compile Include="Assets\Script\Stopmenuscene\MainmenuScript.cs" />
      <Compile Include="Assets\Script\Stopmenuscene\OptionScirpt.cs" />
      <Compile Include="Assets\Script\Stopmenuscene\PlayScript.cs" />
      <Compile Include="Assets\Script\Stopmenuscene\Quitscirpt.cs" />
      <Compile Include="Assets\Script\Stopmenuscene\ResumeEvent.cs" />
+     <Compile Include="Assets\Script\Stopmenuscene\SelecSong.cs" />
      <None Include="Assets\Teleportation Pad\README.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />

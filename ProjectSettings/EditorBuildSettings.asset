@@ -9,3 +9,5 @@ EditorBuildSettings:
     path: Assets/Scene/Game-1.unity
   - enabled: 1
     path: Assets/Scene/Welcome.unity
+  - enabled: 1
+    path: Assets/Scene/Selectsong.unity

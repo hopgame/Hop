@@ -282,6 +282,7 @@ GameObject:
   - 222: {fileID: 653835853}
   - 114: {fileID: 653835852}
   - 114: {fileID: 653835851}
+  - 114: {fileID: 653835854}
   m_Layer: 5
   m_Name: SelectSong
   m_TagString: Untagged
@@ -382,6 +383,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 653835849}
+--- !u!114 &653835854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 653835849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fdc858b5f069204cb2927ba9a4a8be7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &691359175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,10 +1114,10 @@ RectTransform:
   - {fileID: 691359176}
   m_Father: {fileID: 1642569866}
   m_RootOrder: 2
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -4, y: -1.300003}
-  m_SizeDelta: {x: -778, y: -234}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -4, y: 135.7}
+  m_SizeDelta: {x: 194, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2095918281
 MonoBehaviour:
