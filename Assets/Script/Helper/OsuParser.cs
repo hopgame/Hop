@@ -1,10 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using osu.GameplayElements.HitObjects;
 
 public static class OsuParser {
+	public static List<int> cachedList;
 
+	public static void LoadList(string savePath) {
+		//cachedList = new List<int>;
+
+		var serializer = new XmlSerializer (typeof(List<int>));
+		using (var stream = File.Open(savePath, FileMode.Open)) {
+			cachedList = (List<int>)serializer.Deserialize(stream);
+		}
+	}
 }
 
 [Serializable]
@@ -13,7 +27,7 @@ public class OsuFileInfo {
     //public float DifficultyApproachRate = 5;
     //public float DifficultyCircleSize = 5;
     //public float DifficultyHpDrainRate = 5;
-    public float DifficultyOverall = 5;
+    public float DifficultyOverall = -1;
     //public double DifficultySliderMultiplier = 1.4;
     //public double DifficultySliderTickRate = 1;
     #endregion
@@ -23,19 +37,20 @@ public class OsuFileInfo {
 
     public string Tags = string.Empty;
     public string Title = string.Empty;
+	public int beatMapId = -1;
     #endregion
 }
 
 [Serializable]
 public class OsuFile {
     public readonly OsuFileInfo Info;
-    private bool isLoaded = false;
+	[field:NonSerialized]
     public bool IsLoaded {
-        get { return isLoaded; }
-        private set { isLoaded = value; }
+		get;
+		private set;
     }
 
-
+	[field:NonSerialized]
     private List<HitObjectBase> hitObjects;
 
 
