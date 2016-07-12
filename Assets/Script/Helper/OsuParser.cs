@@ -11,12 +11,24 @@ using osu.GameplayElements.HitObjects;
 public static class OsuParser {
 	public static List<int> cachedList;
 
+
+
+
 	public static void LoadList(string savePath) {
 		//cachedList = new List<int>;
 
-		var serializer = new XmlSerializer (typeof(List<int>));
+		XmlSerializer serializer = new XmlSerializer (typeof(List<int>));
 		using (var stream = File.Open(savePath, FileMode.Open)) {
-			cachedList = (List<int>)serializer.Deserialize(stream);
+			OsuParser.cachedList = (List<int>)serializer.Deserialize(stream);
+			stream.Close ();
+		}
+	}
+
+	public static void SaveList(string savePath) {
+		XmlSerializer serializer = new XmlSerializer (typeof(List<int>));
+		using (var stream = File.Open(savePath, FileMode.Create)) {
+			serializer.Serialize (stream, OsuParser.cachedList);
+			stream.Close ();
 		}
 	}
 }
@@ -44,10 +56,13 @@ public class OsuFileInfo {
 [Serializable]
 public class OsuFile {
     public readonly OsuFileInfo Info;
+	//TODO: more serialiable fields
+
 	[field:NonSerialized]
+	private bool isLoaded = false;
     public bool IsLoaded {
-		get;
-		private set;
+		get{ return isLoaded;}
+		private set { isLoaded = value;}
     }
 
 	[field:NonSerialized]
