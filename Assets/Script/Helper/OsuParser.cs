@@ -1,22 +1,66 @@
-﻿using System;
+﻿using UnityEngine; //using some logging feature
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using osu.GameplayElements.HitObjects;
 
-public static class OsuParser {
+public class OsuParser {
     public const string HeaderPattern = @"^\[([a-zA-Z0-9]+)\]$";
     public const string ValuePattern = @"^([a-zA-Z0-9]+)[ ]*:[ ]*(.+)$";
 
     public static List<int> CachedList;
 
 
-    public static void ParseOsuFile(FileStream fileStream) {
+    public static bool ParseOsuFile(string filePath) {
+        Regex headeRegex = new Regex(HeaderPattern);
+        //var fileStream = File.Open(filePath, FileMode.Open);
+        using (var fileStream = new StreamReader(filePath)) {
 
+            var fileInfo = new OsuFileInfo();
+
+
+            string keyWord = string.Empty;
+
+            while (!fileStream.EndOfStream) {
+                string line = fileStream.ReadLine();
+                if (line == null) return false;
+                var match = headeRegex.Match(line);
+                if (match.Success) {
+                    keyWord = match.Groups[0].Value;
+                    continue;
+                }
+
+                switch (keyWord) {
+                        case "Editor": //discard
+                            break;
+                        case "General":
+                        case "Metadata":
+                        case "Difficulty":
+                            OsuFileInfo.ParseOsuFileInfo(fileInfo,line,keyWord);
+                            break;
+                        case "Events":
+                            break;
+                        case "TimingPoints":
+                            break;
+                        case "HitObjects":
+                            break;
+                        default: //when the file start
+                        break;
+
+                    }
+            }
+
+
+
+        }
+
+        return true;
     }
 
 
@@ -42,6 +86,16 @@ public static class OsuParser {
 
 [Serializable]
 public class OsuFileInfo {
+    #region General
+
+    public string AudioFilename = string.Empty;
+    public int AudioLeadIn = -1;
+    public int PreviewTime = -1;
+    public string SampleSet = string.Empty;
+
+    #endregion
+
+
     #region Difficulty Settings
     //public float DifficultyApproachRate = 5;
     //public float DifficultyCircleSize = 5;
@@ -56,8 +110,75 @@ public class OsuFileInfo {
 
     public string Tags = string.Empty;
     public string Title = string.Empty;
-    public int beatMapId = -1;
+    public int BeatMapId = -1;
     #endregion
+
+    
+    /// <summary>
+    /// methods for parsing Osu file information, this assume a single line string to pass to this parser
+    /// </summary>
+    /// <param name="info">OsuFileInfo to receive parsed data</param>
+    /// <param name="toParse">the line of string to parse</param>
+    /// <param name="type">type of info to parse</param>
+    public static void ParseOsuFileInfo(OsuFileInfo info, string toParse, string type) {
+
+        var match = Regex.Match(toParse, OsuParser.ValuePattern);
+        var attriName   = match.Groups[0].Value;
+        var attriValue  = match.Groups[1].Value;
+
+        switch (type) {
+            case "General":
+                switch (attriName) {
+                    case "AudioFilename":
+                        info.AudioFilename = attriValue;
+                        break;
+                    case "AudioLeadIn":
+                        info.AudioLeadIn = int.Parse(attriValue);
+                        break;
+                    case "PreviewTime":
+                        info.PreviewTime = int.Parse(attriValue);
+                        break;
+                    case "SampleSet":
+                        info.SampleSet = attriValue;
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+            case "Difficulty":
+                switch (attriName) {
+                    case "DifficultyOverall":
+                        info.DifficultyOverall = int.Parse(attriValue);
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+            case "Metadata": 
+                switch (attriName) {
+                    case "Artist":
+                        info.Artist = attriValue;
+                        break;
+                    case "Tags":
+                        info.Tags = attriValue;
+                        break;
+                    case "Title":
+                        info.Title = attriValue;
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+            default:
+                Debug.LogError("this type should never be parse" + type);
+                break;
+        }
+
+    }
+
 }
 
 [Serializable]
@@ -73,14 +194,20 @@ public class OsuFile {
     }
 
     [field: NonSerialized]
-    private List<HitObjectBase> _hitObjects;
+    private List<MHitObject> _hitObjects;
 
+    public OsuFile() {
+        this.Info = new OsuFileInfo();
+        //this._hitObjects = new List<MHitObject>();
+    }
 
     public OsuFile(OsuFileInfo info) {
         this.Info = info;
+        //this._hitObjects = new List<MHitObject>();
+
     }
 
-    public void LoadHitObject(List<HitObjectBase> hitObjects) {
+    public void LoadHitObject(List<MHitObject> hitObjects) {
         if (IsLoaded) return;
 
         this._hitObjects = hitObjects;
