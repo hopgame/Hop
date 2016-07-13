@@ -12,9 +12,13 @@ public static class OsuParser {
 	public static List<int> cachedList;
 
 
+	public static void ParseOsuFile(FileStream fileStream) {
+		
+	}
 
 
-	public static void LoadList(string savePath) {
+
+	public static void LoadCachedList(string savePath) {
 		//cachedList = new List<int>;
 
 		XmlSerializer serializer = new XmlSerializer (typeof(List<int>));
@@ -24,7 +28,7 @@ public static class OsuParser {
 		}
 	}
 
-	public static void SaveList(string savePath) {
+	public static void SaveCachedList(string savePath) {
 		XmlSerializer serializer = new XmlSerializer (typeof(List<int>));
 		using (var stream = File.Open(savePath, FileMode.Create)) {
 			serializer.Serialize (stream, OsuParser.cachedList);
