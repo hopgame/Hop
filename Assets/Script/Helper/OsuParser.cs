@@ -9,32 +9,32 @@ using System.Xml.Serialization;
 using osu.GameplayElements.HitObjects;
 
 public static class OsuParser {
-	public static List<int> cachedList;
+    public static List<int> CachedList;
 
 
-	public static void ParseOsuFile(FileStream fileStream) {
-		
-	}
+    public static void ParseOsuFile(FileStream fileStream) {
+
+    }
 
 
 
-	public static void LoadCachedList(string savePath) {
-		//cachedList = new List<int>;
+    public static void LoadCachedList(string savePath) {
+        //cachedList = new List<int>;
 
-		XmlSerializer serializer = new XmlSerializer (typeof(List<int>));
-		using (var stream = File.Open(savePath, FileMode.Open)) {
-			OsuParser.cachedList = (List<int>)serializer.Deserialize(stream);
-			stream.Close ();
-		}
-	}
+        XmlSerializer serializer = new XmlSerializer(typeof(List<int>));
+        using (var stream = File.Open(savePath, FileMode.Open)) {
+            OsuParser.CachedList = (List<int>)serializer.Deserialize(stream);
+            stream.Close();
+        }
+    }
 
-	public static void SaveCachedList(string savePath) {
-		XmlSerializer serializer = new XmlSerializer (typeof(List<int>));
-		using (var stream = File.Open(savePath, FileMode.Create)) {
-			serializer.Serialize (stream, OsuParser.cachedList);
-			stream.Close ();
-		}
-	}
+    public static void SaveCachedList(string savePath) {
+        XmlSerializer serializer = new XmlSerializer(typeof(List<int>));
+        using (var stream = File.Open(savePath, FileMode.Create)) {
+            serializer.Serialize(stream, OsuParser.CachedList);
+            stream.Close();
+        }
+    }
 }
 
 [Serializable]
@@ -53,24 +53,24 @@ public class OsuFileInfo {
 
     public string Tags = string.Empty;
     public string Title = string.Empty;
-	public int beatMapId = -1;
+    public int beatMapId = -1;
     #endregion
 }
 
 [Serializable]
 public class OsuFile {
     public readonly OsuFileInfo Info;
-	//TODO: more serialiable fields
+    //TODO: more serialiable fields
 
-	[field:NonSerialized]
-	private bool isLoaded = false;
+    [field: NonSerialized]
+    private bool _isLoaded = false;
     public bool IsLoaded {
-		get{ return isLoaded;}
-		private set { isLoaded = value;}
+        get { return _isLoaded; }
+        private set { _isLoaded = value; }
     }
 
-	[field:NonSerialized]
-    private List<HitObjectBase> hitObjects;
+    [field: NonSerialized]
+    private List<HitObjectBase> _hitObjects;
 
 
     public OsuFile(OsuFileInfo info) {
@@ -78,9 +78,9 @@ public class OsuFile {
     }
 
     public void LoadHitObject(List<HitObjectBase> hitObjects) {
-        if(IsLoaded) return;
+        if (IsLoaded) return;
 
-        this.hitObjects = hitObjects;
+        this._hitObjects = hitObjects;
         this.IsLoaded = true;
     }
 
