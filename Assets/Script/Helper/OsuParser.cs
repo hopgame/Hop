@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -29,7 +30,8 @@ public class OsuParser {
 
             while (!fileStream.EndOfStream) {
                 string line = fileStream.ReadLine();
-                if (line == null) return false;
+                if (line == null) throw new Exception("string from fileStream is null");
+                if (line.StartsWith(@"\\")) continue; //comment line, ignore
                 var match = headeRegex.Match(line);
                 if (match.Success) {
                     keyWord = match.Groups[0].Value;
@@ -45,6 +47,7 @@ public class OsuParser {
                             OsuFileInfo.ParseOsuFileInfo(fileInfo,line,keyWord);
                             break;
                         case "Events":
+                            OsuFileInfo.ParseOsuFileEvents(fileInfo,line);
                             break;
                         case "TimingPoints":
                             break;
@@ -95,7 +98,6 @@ public class OsuFileInfo {
 
     #endregion
 
-
     #region Difficulty Settings
     //public float DifficultyApproachRate = 5;
     //public float DifficultyCircleSize = 5;
@@ -113,7 +115,55 @@ public class OsuFileInfo {
     public int BeatMapId = -1;
     #endregion
 
-    
+    #region Events
+
+    public string BackGround = string.Empty;
+    public string Video = string.Empty;
+    public  Queue<KeyValuePair<int, int>> BreakTimes = null;
+
+    #endregion
+
+    /// <summary>
+    /// parse OsuFile [events] into OsuFileInfo
+    /// </summary>
+    /// <param name="info">OsuFileInfo to receive parsed data</param>
+    /// <param name="toParse">the line of string to parse</param>
+    public static void ParseOsuFileEvents(OsuFileInfo info, string toParse) {
+        string[] keys = toParse.Split(',');
+        switch (keys[0]) {
+            case "0":
+                if (keys[1] == "0") {
+                    if (keys[2].StartsWith("\"") && keys[2].EndsWith("\"")) {
+                        info.BackGround = keys[2].Substring(1, keys[2].Length - 2);
+                    }
+                    else {
+                        info.BackGround = keys[2];
+                    }
+                    Debug.Log("BG Name:" + info.BackGround);
+
+                }
+                break;
+            case "2":
+
+                if(!Regex.IsMatch(keys[2], @"^[0-9]+$")  || !Regex.IsMatch(keys[1], @"^[0-9]+$")) goto default;
+
+                if (info.BreakTimes == null) {
+                    info.BreakTimes = new Queue<KeyValuePair<int, int>>();
+                }
+
+                info.BreakTimes.Enqueue(new KeyValuePair<int, int>(int.Parse(keys[1]), int.Parse(keys[2])));
+
+
+                break;
+            case "Video":
+                break;
+            default:
+                Debug.Log("Dropped Events type:" + keys[0]);
+                break;
+        }
+    }
+
+
     /// <summary>
     /// methods for parsing Osu file information, this assume a single line string to pass to this parser
     /// </summary>
@@ -203,8 +253,7 @@ public class OsuFile {
 
     public OsuFile(OsuFileInfo info) {
         this.Info = info;
-        //this._hitObjects = new List<MHitObject>();
-
+        
     }
 
     public void LoadHitObject(List<MHitObject> hitObjects) {
