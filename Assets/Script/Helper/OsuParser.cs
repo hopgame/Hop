@@ -52,6 +52,7 @@ public class OsuParser {
                             OsuFileInfo.ParseOsuFileEvents(fileInfo,line);
                             break;
                         case "TimingPoints":
+                            OsuFileInfo.ParseOsuTimingPoints(fileInfo,line);
                             break;
                         case "HitObjects":
                             break;
@@ -199,7 +200,6 @@ public class OsuFileInfo {
                 break;
         }
     }
-
 
     /// <summary>
     /// methods for parsing Osu file information, this assume a single line string to pass to this parser
