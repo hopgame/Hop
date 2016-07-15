@@ -14,6 +14,8 @@ using System.Xml.Serialization;
 using osu.GameplayElements.HitObjects;
 
 public class OsuParser {
+    const string OsuFileFolder = @".\OsuSaved\";
+
     public const string HeaderPattern = @"^\[([a-zA-Z0-9]+)\]$";
     public const string ValuePattern = @"^([a-zA-Z0-9]+)[ ]*:[ ]*(.+)$";
 
@@ -22,10 +24,10 @@ public class OsuParser {
 
     public static bool ParseOsuFile(string filePath) {
         Regex headeRegex = new Regex(HeaderPattern);
+        var fileInfo = new OsuFileInfo();
         //var fileStream = File.Open(filePath, FileMode.Open);
         using (var fileStream = new StreamReader(filePath)) {
 
-            var fileInfo = new OsuFileInfo();
 
 
             string keyWord = string.Empty;
@@ -54,22 +56,26 @@ public class OsuParser {
                         case "TimingPoints":
                             OsuFileInfo.ParseOsuTimingPoints(fileInfo,line);
                             break;
-                        case "HitObjects":
-                            break;
+                        case "HitObjects": //discarded, only load when the song is actually loaded
                         default: //when the file start
                         break;
 
                     }
             }
 
-
-
         }
+        var osuFile = new OsuFile(fileInfo, filePath);
+        CachedList.Add(fileInfo.BeatMapId);
+
+        var bf = new BinaryFormatter();
+
+        using (var fileToSave = File.Open(OsuFileFolder + fileInfo.BeatMapId + ".osv", FileMode.Create)) {
+            bf.Serialize(fileToSave,osuFile);
+        }
+        
 
         return true;
     }
-
-
 
     public static void LoadCachedList(string savePath) {
         //cachedList = new List<int>;
@@ -270,6 +276,7 @@ public class OsuFileInfo {
 
 [Serializable]
 public class OsuFile {
+    public readonly string FilePath;
     public readonly OsuFileInfo Info;
 
     [field: NonSerialized]
@@ -282,15 +289,15 @@ public class OsuFile {
     [field: NonSerialized]
     private List<MHitObject> _hitObjects;
 
-    public OsuFile() {
+    public OsuFile(string filePath) {
+        FilePath = filePath;
         this.Info = new OsuFileInfo();
-        TimingPoints = new Queue<OsuTimingPoint>();
         //this._hitObjects = new List<MHitObject>();
     }
 
-    public OsuFile(OsuFileInfo info) {
+    public OsuFile(OsuFileInfo info, string filePath) {
         this.Info = info;
-        TimingPoints = new Queue<OsuTimingPoint>();
+        FilePath = filePath;
         
     }
 
