@@ -4,13 +4,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using osu.GameplayElements.HitObjects;
 
 public class OsuParser {
+    const string OsuFileFolder = @".\OsuSaved\";
+
     public const string HeaderPattern = @"^\[([a-zA-Z0-9]+)\]$";
     public const string ValuePattern = @"^([a-zA-Z0-9]+)[ ]*:[ ]*(.+)$";
 
@@ -19,17 +24,18 @@ public class OsuParser {
 
     public static bool ParseOsuFile(string filePath) {
         Regex headeRegex = new Regex(HeaderPattern);
+        var fileInfo = new OsuFileInfo();
         //var fileStream = File.Open(filePath, FileMode.Open);
         using (var fileStream = new StreamReader(filePath)) {
 
-            var fileInfo = new OsuFileInfo();
 
 
             string keyWord = string.Empty;
 
             while (!fileStream.EndOfStream) {
                 string line = fileStream.ReadLine();
-                if (line == null) return false;
+                if (line == null) throw new Exception("string from fileStream is null");
+                if (line.StartsWith(@"\\")) continue; //comment line, ignore
                 var match = headeRegex.Match(line);
                 if (match.Success) {
                     keyWord = match.Groups[0].Value;
@@ -45,25 +51,31 @@ public class OsuParser {
                             OsuFileInfo.ParseOsuFileInfo(fileInfo,line,keyWord);
                             break;
                         case "Events":
+                            OsuFileInfo.ParseOsuFileEvents(fileInfo,line);
                             break;
                         case "TimingPoints":
+                            OsuFileInfo.ParseOsuTimingPoints(fileInfo,line);
                             break;
-                        case "HitObjects":
-                            break;
+                        case "HitObjects": //discarded, only load when the song is actually loaded
                         default: //when the file start
                         break;
 
                     }
             }
 
-
-
         }
+        var osuFile = new OsuFile(fileInfo, filePath);
+        CachedList.Add(fileInfo.BeatMapId);
+
+        var bf = new BinaryFormatter();
+
+        using (var fileToSave = File.Open(OsuFileFolder + fileInfo.BeatMapId + ".osv", FileMode.Create)) {
+            bf.Serialize(fileToSave,osuFile);
+        }
+        
 
         return true;
     }
-
-
 
     public static void LoadCachedList(string savePath) {
         //cachedList = new List<int>;
@@ -95,7 +107,6 @@ public class OsuFileInfo {
 
     #endregion
 
-
     #region Difficulty Settings
     //public float DifficultyApproachRate = 5;
     //public float DifficultyCircleSize = 5;
@@ -113,7 +124,89 @@ public class OsuFileInfo {
     public int BeatMapId = -1;
     #endregion
 
-    
+    #region Events
+
+    public string BackGround = string.Empty;
+    public string Video = string.Empty;
+    public List<KeyValuePair<int, int>> BreakTimes = null;
+
+    #endregion
+
+    #region TimingPoints
+
+    public List<OsuTimingPoint> TimingPoints;
+
+    #endregion
+
+    /// <summary>
+    /// parse OsuFile [TimingPoints] into OsuFileInfo
+    /// </summary>
+    /// <param name="info">OsuFileInfo to receive parsed data</param>
+    /// <param name="toParse">the line of string to parse</param>
+    public static void ParseOsuTimingPoints(OsuFileInfo info, string toParse) {
+        if(info.TimingPoints == null) info.TimingPoints = new List<OsuTimingPoint>();
+
+
+        string[] keys = toParse.Split(',');
+
+        int offset = int.Parse(keys[0]);
+        float mSecPerBeat = float.Parse(keys[1]);
+        int meter = int.Parse(keys[2]);
+        int sampleType = int.Parse(keys[3]);
+        int sampleSet = int.Parse(keys[4]);
+        int volume = int.Parse(keys[5]); //0-100
+        bool inherited = keys[6] == "1";
+        bool kiaiMode = keys[7] == "1";
+
+
+        if (inherited) {
+            //BEWARE: velocity is ignore
+            if (mSecPerBeat <= 0) {
+                mSecPerBeat = info.TimingPoints.Last().MSecPerBeat;
+            }
+        }
+        var beatPerMinute = Mathf.Round(60000/mSecPerBeat);
+
+        info.TimingPoints.Add(new OsuTimingPoint(offset,mSecPerBeat,beatPerMinute,meter,sampleType,sampleSet,volume,inherited,kiaiMode));
+
+
+    }
+
+    /// <summary>
+    /// parse OsuFile [events] into OsuFileInfo
+    /// </summary>
+    /// <param name="info">OsuFileInfo to receive parsed data</param>
+    /// <param name="toParse">the line of string to parse</param>
+    public static void ParseOsuFileEvents(OsuFileInfo info, string toParse) {
+        string[] keys = toParse.Split(',');
+        switch (keys[0]) {
+            case "0":
+                if (keys[1] == "0") {
+                    if (keys[2].StartsWith("\"") && keys[2].EndsWith("\"")) {
+                        info.BackGround = keys[2].Substring(1, keys[2].Length - 2);
+                    }
+                    else {
+                        info.BackGround = keys[2];
+                    }
+                    Debug.Log("BG Name:" + info.BackGround);
+
+                }
+                break;
+            case "2":
+                if(!Regex.IsMatch(keys[2], @"^[0-9]+$")  || !Regex.IsMatch(keys[1], @"^[0-9]+$")) goto default;
+                if (info.BreakTimes == null) {
+                    info.BreakTimes = new List<KeyValuePair<int, int>>();
+                }
+                info.BreakTimes.Add(new KeyValuePair<int, int>(int.Parse(keys[1]), int.Parse(keys[2])));
+                break;
+            case "Video":
+                break;
+            default:
+                Debug.Log("Dropped Events type:" + keys[0]);
+                break;
+        }
+    }
+
     /// <summary>
     /// methods for parsing Osu file information, this assume a single line string to pass to this parser
     /// </summary>
@@ -183,8 +276,8 @@ public class OsuFileInfo {
 
 [Serializable]
 public class OsuFile {
+    public readonly string FilePath;
     public readonly OsuFileInfo Info;
-    //TODO: more serialiable fields
 
     [field: NonSerialized]
     private bool _isLoaded = false;
@@ -196,15 +289,16 @@ public class OsuFile {
     [field: NonSerialized]
     private List<MHitObject> _hitObjects;
 
-    public OsuFile() {
+    public OsuFile(string filePath) {
+        FilePath = filePath;
         this.Info = new OsuFileInfo();
         //this._hitObjects = new List<MHitObject>();
     }
 
-    public OsuFile(OsuFileInfo info) {
+    public OsuFile(OsuFileInfo info, string filePath) {
         this.Info = info;
-        //this._hitObjects = new List<MHitObject>();
-
+        FilePath = filePath;
+        
     }
 
     public void LoadHitObject(List<MHitObject> hitObjects) {
@@ -216,4 +310,27 @@ public class OsuFile {
 
 }
 
+[Serializable]
+public struct OsuTimingPoint {
+    public OsuTimingPoint(int offset, float mSecPerBeat, float beatPerMinute, int meter, int sampleType, int sampleSet, int volume, bool inherited, bool kiaiMode) {
+        Offset = offset;
+        MSecPerBeat = mSecPerBeat;
+        BeatPerMinute = beatPerMinute;
+        Meter = meter;
+        SampleType = sampleType;
+        SampleSet = sampleSet;
+        Volume = volume;
+        Inherited = inherited;
+        KiaiMode = kiaiMode;
+    }
 
+    public readonly int Offset;
+    public readonly float MSecPerBeat;
+    public readonly float BeatPerMinute;
+    public readonly int Meter;
+    public readonly int SampleType;
+    public readonly int SampleSet;
+    public readonly int Volume; //0-100
+    public readonly bool Inherited;
+    public readonly bool KiaiMode;
+}

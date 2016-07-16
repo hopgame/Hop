@@ -178,6 +178,18 @@ namespace osu.GameplayElements.HitObjects {
         public virtual Vector2 PositionAtTime(int time) {
             return Position;
         }
+
+
+        public static void ParseHitObject(HitObjectBase hitObject, string toParse) {
+            var keys = toParse.Split(',');
+
+            //BEWARE:many components of normal hitObj are discarded here for convienence
+            Vector2 position = new Vector2(int.Parse(keys[0]),int.Parse(keys[1]));
+            hitObject.Position = position;
+            hitObject.EndTime = hitObject.StartTime = int.Parse(keys[2]);
+            hitObject.Type = (HitObjectType) int.Parse(keys[3]);
+            hitObject.SoundType = (HitObjectSoundType) int.Parse(keys[4]);
+        }
     }
 
     [Flags]
