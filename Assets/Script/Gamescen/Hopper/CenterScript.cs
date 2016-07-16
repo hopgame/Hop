@@ -4,7 +4,7 @@ using System.Collections;
 
 
 public class CenterScript : MonoBehaviour {
-    public Hopperscript hopper;
+    public Hopperscript hopper;//father hopper
     // Use this for initialization
     void Start () {
 	
@@ -16,11 +16,17 @@ public class CenterScript : MonoBehaviour {
 	}
     void OnTriggerStay(Collider beats)
     {
-        hopper.perfectvalue = 2;//now if the user touch the button it will be a perfect
+        if(hopper.occupy == false)//test if the previous beat still in the hopper
+        {
+            hopper.perfectvalue = 2;//now if the user touch the button it will be a perfect
+        }
+        
 
     }
     void onTriggerExit(Collider beats)
     {
         hopper.perfectvalue = 1;
+        hopper.occupy = true;
+
     }
 }

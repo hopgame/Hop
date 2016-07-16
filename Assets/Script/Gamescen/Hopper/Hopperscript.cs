@@ -7,7 +7,9 @@ public class Hopperscript : MonoBehaviour {
     private int perfectincre = 20;//score to add for perfect
     public int perfectvalue = 0;//for button to determine if the hopper is triggering beats(good or perfect)
     public GameController tester;//the controller
-    public Collider currentbeats;//the current beats
+    public Collider currentbeats;//the current beats which need to be setactive false
+    public Queue beatsqueue = new Queue();//queue for the beats entering the hopper
+    public bool occupy = false;//the current beat leaving the center but still in the hopper
 
     void start()
     {
@@ -29,15 +31,15 @@ public class Hopperscript : MonoBehaviour {
     void  OnTriggerEnter(Collider beats)
     {
         perfectvalue = 1;//if user touch the button now will get a good
-        currentbeats = beats;//this beats is ready fo setactive(false)
-
+        beatsqueue.Enqueue(beats);
     }
 
     void OnTriggerExit(Collider beats)
     {
-        perfectvalue = 0;//reset the jud value
+        perfectvalue = 0;//reset the perfect value
         tester.clearcombo();//clear the combo in controller
-        beats.gameObject.SetActive(false);// mark one miss, destory the beats
+        currentbeats = beatsqueue.Dequeue();//deqeue the exiting beat
+        currentbeats.gameObject.SetActive(false);// mark one miss, destory the beat
 
     }
     public int ifperfect()
