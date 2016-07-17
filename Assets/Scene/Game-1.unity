@@ -925,8 +925,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   perfectvalue: 0
-  tester: {fileID: 1571340614}
+  gamecontroller: {fileID: 0}
   currentbeats: {fileID: 0}
+  occupy: 0
+  entering: 0
 --- !u!1 &429721304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1049,8 +1051,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   perfectvalue: 0
-  tester: {fileID: 1571340614}
+  gamecontroller: {fileID: 0}
   currentbeats: {fileID: 0}
+  occupy: 0
+  entering: 0
 --- !u!1 &452973522
 GameObject:
   m_ObjectHideFlags: 0
@@ -1652,8 +1656,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   perfectvalue: 0
-  tester: {fileID: 1571340614}
+  gamecontroller: {fileID: 0}
   currentbeats: {fileID: 0}
+  occupy: 0
+  entering: 0
 --- !u!1001 &809069213
 Prefab:
   m_ObjectHideFlags: 0
@@ -1890,8 +1896,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   perfectvalue: 0
-  tester: {fileID: 1571340614}
+  gamecontroller: {fileID: 0}
   currentbeats: {fileID: 0}
+  occupy: 0
+  entering: 0
 --- !u!1 &997690798
 GameObject:
   m_ObjectHideFlags: 0
@@ -2404,6 +2412,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f498fe2a4c131bb46a27a0cff5828254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hopper0: {fileID: 759511853}
+  hopper1: {fileID: 399003894}
+  hopper2: {fileID: 923370424}
+  hopper3: {fileID: 429721311}
+  goodincre: 10
+  perfectincre: 20
 --- !u!4 &1571340615
 Transform:
   m_ObjectHideFlags: 0

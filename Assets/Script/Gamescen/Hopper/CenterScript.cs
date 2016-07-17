@@ -14,9 +14,18 @@ public class CenterScript : MonoBehaviour {
 	void Update () {
 	
 	}
+    void OnTriggerEnter(Collider beats)
+    {
+        hopper.entering--;
+        if (hopper.occupy == 0)//test if the previous beat still in the hopper
+        {
+            hopper.perfectvalue = 2;//now if the user touch the button it will be a perfect
+        }
+
+    }
     void OnTriggerStay(Collider beats)
     {
-        if(hopper.occupy == false)//test if the previous beat still in the hopper
+        if(hopper.occupy == 0)//test if the previous beat still in the hopper
         {
             hopper.perfectvalue = 2;//now if the user touch the button it will be a perfect
         }
@@ -26,7 +35,7 @@ public class CenterScript : MonoBehaviour {
     void onTriggerExit(Collider beats)
     {
         hopper.perfectvalue = 1;
-        hopper.occupy = true;
+        hopper.occupy++;//add one reamin beat in hopper
 
     }
 }

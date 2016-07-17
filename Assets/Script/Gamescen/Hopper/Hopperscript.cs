@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Hopperscript : MonoBehaviour {
     private int scoreforround = 0;//score for one round;
-    private int goodincre = 10;//socre to add for good
-    private int perfectincre = 20;//score to add for perfect
     public int perfectvalue = 0;//for button to determine if the hopper is triggering beats(good or perfect)
-    public GameController tester;//the controller
+    public GameController gamecontroller;//the controller
     public Collider currentbeats;//the current beats which need to be setactive false
-    public Queue beatsqueue = new Queue();//queue for the beats entering the hopper
-    public bool occupy = false;//the current beat leaving the center but still in the hopper
+    public Queue <Collider>beatsqueue = new Queue<Collider>();//queue for the beats entering the hopper
+    public int occupy = 0;//the number of current beat leaving the center but still in the hopper
+    public int entering = 0;//the number of current beat entering hopper but not yet entering center
 
     void start()
     {
@@ -24,7 +24,7 @@ public class Hopperscript : MonoBehaviour {
         Debug.Log("Hiting something");
         if (collisionInfo.gameObject.tag.CompareTo("Beatspad") == 0)//push the score to controller when hopper hit the pad
         {
-            tester.addScore(scoreforround);//add the current score in the hopper into controller to refreash the score board
+            gamecontroller.addScore(scoreforround);//add the current score in the hopper into controller to refreash the score board
         }
         
     }
@@ -32,12 +32,17 @@ public class Hopperscript : MonoBehaviour {
     {
         perfectvalue = 1;//if user touch the button now will get a good
         beatsqueue.Enqueue(beats);
+        entering++;
     }
 
     void OnTriggerExit(Collider beats)
     {
-        perfectvalue = 0;//reset the perfect value
-        tester.clearcombo();//clear the combo in controller
+        if(entering != 0 && occupy !=0 && perfectvalue != 2)
+        {
+            perfectvalue = 0;//reset the perfect value
+        }
+        gamecontroller.clearcombo();//clear the combo in controller
+		occupy--;//minus one beats beacuase of leaving
         currentbeats = beatsqueue.Dequeue();//deqeue the exiting beat
         currentbeats.gameObject.SetActive(false);// mark one miss, destory the beat
 
@@ -48,10 +53,10 @@ public class Hopperscript : MonoBehaviour {
     }
     public void addGScore()
     {
-        scoreforround += goodincre;//add good score into the score of this round    
+        scoreforround += gamecontroller.goodincre;//add good score into the score of this round    
     }
     public void addPScore()
     {
-        scoreforround += perfectincre;//add perfect score into the score of this round
+        scoreforround += gamecontroller.perfectincre;//add perfect score into the score of this round
     }
 }

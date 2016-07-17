@@ -4,13 +4,20 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
     // Use this for initialization
-    public static int currentscore = 0;
-    public static int currentcombo = 0;
+    public Hopperscript hopper0;
+    public Hopperscript hopper1;
+    public Hopperscript hopper2;
+    public Hopperscript hopper3;
+    public static int currentscore = 0;//score for now
+    public static int currentcombo = 0;//combo for now
+    public int goodincre = 10;//socre to add for good
+    public int perfectincre = 20;//score to add for perfect
+    
 
-	void Start () {
+    void Start () {
 	
 	}
-    public void addScore(int incre)
+    public void addScore(int incre)//add score from each hopper to the controller
     {
         currentscore += incre;
     }
@@ -18,14 +25,25 @@ public class GameController : MonoBehaviour {
     {
         currentcombo++;
     }
-    public void clearcombo()
+    public void clearcombo()//called when miss happened
     {
         currentcombo = 0;
     }
 
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
+        if(currentcombo > 0 && currentcombo %50 == 0)
+        {
+            goodincre *= 2;
+            perfectincre *= 2;
+            
+        }
+        if(currentcombo == 0)
+        {
+            goodincre = 10;
+            perfectincre = 20;
+        }
 	
 	}
 }
