@@ -53,9 +53,11 @@
      <Compile Include="Assets\Script\Buttonscript.cs" />
      <Compile Include="Assets\Script\FixedRatio.cs" />
      <Compile Include="Assets\Script\Gamescen\Cameracontrol.cs" />
+     <Compile Include="Assets\Script\Gamescen\Combo.cs" />
      <Compile Include="Assets\Script\Gamescen\Hopper\CenterScript.cs" />
      <Compile Include="Assets\Script\Gamescen\Hopper\Hopperscript.cs" />
      <Compile Include="Assets\Script\Gamescen\SButton\SButton.cs" />
+     <Compile Include="Assets\Script\Gamescen\Score.cs" />
      <Compile Include="Assets\Script\Gamescen\Tbutton\Tbutton.cs" />
      <Compile Include="Assets\Script\Gamescen\beatspad\CustomTeleporter.cs" />
      <Compile Include="Assets\Script\Gamescen\top\Topscrpit.cs" />

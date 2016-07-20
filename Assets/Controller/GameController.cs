@@ -8,8 +8,8 @@ public class GameController : MonoBehaviour {
     public Hopperscript hopper1;
     public Hopperscript hopper2;
     public Hopperscript hopper3;
-    public static int currentscore = 0;//score for now
-    public static int currentcombo = 0;//combo for now
+    public  int currentscore = 0;//score for now
+    public  int currentcombo = 0;//combo for now
     public int goodincre = 10;//socre to add for good
     public int perfectincre = 20;//score to add for perfect
     
