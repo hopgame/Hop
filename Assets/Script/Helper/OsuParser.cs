@@ -308,6 +308,10 @@ public class OsuFile {
         this.IsLoaded = true;
     }
 
+    public static OsuFile LoadSong(int SongID) {
+        return null;
+    }
+
 }
 
 [Serializable]

@@ -179,7 +179,11 @@ namespace osu.GameplayElements.HitObjects {
             return Position;
         }
 
-
+        /// <summary>
+        /// Parser for HitObject, this should be called internally by OsuParser
+        /// </summary>
+        /// <param name="hitObject">hitobject to be written in</param>
+        /// <param name="toParse">the string to be parse</param>
         public static void ParseHitObject(HitObjectBase hitObject, string toParse) {
             var keys = toParse.Split(',');
 
